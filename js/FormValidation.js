@@ -49,7 +49,7 @@ function checkDate() {
     const dateError = document.querySelector('.date-error');
     try {
         let date = day.value + " " + month.value + " " + year.value;
-        checkStartDate(new Date(Date.parse(date)));
+       checkStartDate(new Date(Date.parse(date)));
         dateError.textContent = "";
     } catch (e) {
         dateError.textContent = e;
@@ -71,14 +71,14 @@ const save = (event) => {
         // createAndUpdateStorage(empData);
 
         setEmployeePayrollObject();
-        if (site_properties.use_local_storage.match("true")) {
+        if(site_properties.use_local_storage.match("true")){
             createAndUpdateStorage();
-            alert("Data Stored With Name " + employPayrollObject._name);
+            alert("Data Stored With Name "+employPayrollObject._name);
             redirect();
-        } else
+        }else
             createOrUpdateEmployeeInJsonServer();
-        // alert("Data Updated With Name "+employPayrollObject._name);
-        // redirect();
+            // alert("Data Updated With Name "+employPayrollObject._name);
+            // redirect();
 
     } catch (e) {
         console.log(e)
@@ -89,8 +89,8 @@ const save = (event) => {
 const setEmployeePayrollObject = () => {
 
     //Here we are directly store values in employPayrollObject
-    if (!isUpdate && site_properties.use_local_storage.match("true")) {
-        employPayrollObject.id = createNewEmpId();
+    if(!isUpdate && site_properties.use_local_storage.match("true")){
+        employPayrollObject.id=createNewEmpId();
     }
     employPayrollObject._name = getInputValueId('#name');
     employPayrollObject._profilePic = getSelectedValue('[name=profile]').pop();
@@ -124,21 +124,21 @@ const setEmployeePayrollObject = () => {
 }
 
 function createOrUpdateEmployeeInJsonServer() {
-    let url = site_properties.server_url;
-    let methodCall = "POST";
-    let message = "Data Store with name ";
-    if (isUpdate) {
-        methodCall = "PUT";
-        url = url + employPayrollObject.id.toString();
-        message = "Data Updated with name ";
+    let url=site_properties.server_url;
+    let methodCall="POST";
+    let message="Data Store with name ";
+    if(isUpdate){
+        methodCall="PUT";
+        url=url+employPayrollObject.id.toString();
+         message="Data Updated with name ";
     }
-    makeServiceCall(methodCall, url, true, employPayrollObject)
-        .then(response => {
+    makeServiceCall(methodCall,url,true,employPayrollObject)
+        .then(response=>{
             //  return;
-            alert(message + employPayrollObject._name)
-            redirect();
+             alert(message +employPayrollObject._name)
+             redirect();
         })
-        .catch(error => {
+        .catch(error=>{
             console.log("inside error")
             throw error
         });
@@ -193,7 +193,7 @@ const createNewEmpId = () => {
 
 const createAndUpdateStorage = () => {
     let dataList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
-
+    
     if (dataList) {
         let existingEmpData = dataList.find(empData => empData.id == employPayrollObject.id);
         if (!existingEmpData) {

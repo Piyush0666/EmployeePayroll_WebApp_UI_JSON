@@ -1,9 +1,9 @@
 let employeePayrollList;
 
 window.addEventListener('DOMContentLoaded', (event) => {
-    if (site_properties.use_local_storage.match("true")) {
-        getDataFromLocalStorage();
-    } else
+    if(site_properties.use_local_storage.match("true")){
+         getDataFromLocalStorage();
+    }else
         getPayrollDataFromServer();
 })
 
@@ -15,21 +15,21 @@ function processEmployeePayrollDataResponse() {
 }
 
 const getDataFromLocalStorage = () => {
-    employeePayrollList = localStorage.getItem('EmployeePayrollList') ?
+    employeePayrollList= localStorage.getItem('EmployeePayrollList') ?
         JSON.parse(localStorage.getItem('EmployeePayrollList')) : [];
     processEmployeePayrollDataResponse();
 }
 
-const getPayrollDataFromServer = () => {
+const getPayrollDataFromServer=()=> {
 
     makeServiceCall("GET", site_properties.server_url, true)
-        .then(response => {
-            employeePayrollList = JSON.parse(response);
+        .then(response =>{
+            employeePayrollList=JSON.parse(response);
             processEmployeePayrollDataResponse();
         })
-        .catch(error => {
-            console.log("Get Error Status : " + JSON.stringify(error));
-            employeePayrollList = [];
+        .catch(error=>{
+            console.log("Get Error Status : "+JSON.stringify(error));
+            employeePayrollList=[];
             processEmployeePayrollDataResponse();
         })
 }
@@ -53,7 +53,7 @@ const createInnerHtml = () => {
                 <img id ="${empPayrollData.id}" src="../assets/icons/create-black-18dp.svg" alt="Edit" onClick=update(this)>
             </td>
         </tr>`
-            ;
+        ;
     }
     document.querySelector('#display').innerHTML = innerHtml;
 }
@@ -68,27 +68,27 @@ const getDepartmentHtml = (data) => {
 
 
 const remove = (data) => {
-
+  
     let employeeData = employeePayrollList.find(empData => empData.id == data.id);
     if (!employeeData) {
         return;
     }
     const index = employeePayrollList.map(empData => empData.id).indexOf(employeeData.id);
-    if (site_properties.use_local_storage.match("true")) {
+    if(site_properties.use_local_storage.match("true")){
         employeePayrollList.splice(index, 1);
         localStorage.setItem('EmployeePayrollList', JSON.stringify(employeePayrollList));
         document.querySelector('.emp-count').textContent = employeePayrollList.length;
         createInnerHtml();
-    } else {
-        const deleteUrl = site_properties.server_url + employeeData.id.toString();
-        makeServiceCall("DELETE", deleteUrl, true)
-            .then(response => {
+    }else {
+        const deleteUrl=site_properties.server_url+employeeData.id.toString();
+        makeServiceCall("DELETE",deleteUrl,true)
+            .then(response=>{
                 console.log(response)
-                document.querySelector(".emp-count").textContent = employeePayrollList.length;
+                document.querySelector(".emp-count").textContent=employeePayrollList.length;
                 createInnerHtml();
             })
-            .catch(error => {
-                alert("Error while deleting " + error)
+            .catch(error=>{
+                alert("Error while deleting "+error)
             })
     }
 
